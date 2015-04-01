@@ -1,9 +1,6 @@
 package trial;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by priyadarshini on 3/31/15.
@@ -19,13 +16,49 @@ public class sample {
     }
 
     public static void main(String[] args) {
-        sample sample = new sample();
-        sample.replyList.add(4);
-        sample.replyList.add(7);
-        sample.replyList.add(5);
-        sample.replyList.add(3);
-        sample.createServerTree();
-        System.out.println("final" + sample.checkQuorumFor(1));
+//        sample sample = new sample();
+//        sample.replyList.add(4);
+//        sample.replyList.add(7);
+//        sample.replyList.add(5);
+//        sample.replyList.add(3);
+//        sample.createServerTree();
+//        System.out.println("final" + sample.checkQuorumFor(1));
+        PriorityQueue<CSRequest> queue= new PriorityQueue(10, new QueueComparator());
+        queue.add(new CSRequest(5, 0));
+        queue.add(new CSRequest(4, 0));
+        queue.add(new CSRequest(2, 0));
+        queue.add(new CSRequest(1, 0));
+        queue.add(new CSRequest(3, 0));
+        queue.add(new CSRequest(5, 4));
+
+//        PriorityQueue<Integer> queue= new PriorityQueue(10, new IntCOmparator());
+//        queue.add(1);
+//        queue.add(5);
+//        queue.add(2);
+//        queue.add(6);
+//        queue.add(5);
+printQueue(queue);
+        while (queue.size() != 0) {
+            CSRequest remove = queue.poll();
+            System.out.println(remove.nodeNumber + " " +remove.sequenceNumber);
+        }
+    }
+
+    private static void printQueue(PriorityQueue<CSRequest> queue) {
+        int i=0;
+        Iterator<CSRequest> iterator = queue.iterator();
+        while(iterator.hasNext()){
+            CSRequest next = iterator.next();
+            System.out.println("next value" + next.nodeNumber + " " + next.sequenceNumber);
+        }
+        for (CSRequest csRequest : queue) {
+            System.out.println("csRequest value" + csRequest.nodeNumber + " " + csRequest.sequenceNumber);
+        }
+//        while(i<queue.size()){
+//            CSRequest peek = queue.poll();
+//            System.out.println("peek value" + peek.nodeNumber + " " + peek.sequenceNumber);
+//            i+=1;
+//        }
     }
 
     private boolean checkQuorumFor(int nodeNumber) {

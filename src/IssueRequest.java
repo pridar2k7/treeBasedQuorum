@@ -6,12 +6,8 @@ import java.net.Socket;
  * Created by priyadarshini on 3/29/15.
  */
 class IssueRequest extends Thread {
-    private Nodes nodes;
-    int entryCount;
 
-    public IssueRequest(Nodes nodes) {
-        this.nodes=nodes;
-        this.entryCount=0;
+    public IssueRequest() {
         start();
     }
 
@@ -19,11 +15,12 @@ class IssueRequest extends Thread {
     @Override
     public void run() {
         try {
-            System.out.println("EntryCount " + entryCount);
+            System.out.println("EntryCount " + Nodes.entryCount);
 //            System.out.println("Total Messages " + server.totalMessages);
             int timeToSleep = 0;
-            if (entryCount <= 20) {
-                timeToSleep = (int) ((5 + entryCount * Maekawa.UNIT_DIFF) * Maekawa.TIME_UNIT);
+            if (Nodes.entryCount <= 20) {
+                timeToSleep = (int) ((5 + Nodes.entryCount * Maekawa.UNIT_DIFF) * Nodes.TIME_UNIT);
+                System.out.println(timeToSleep);
                 Thread.sleep(timeToSleep);
                 requestCriticalSection();
 //                server.requestCriticalSection();
@@ -50,7 +47,9 @@ class IssueRequest extends Thread {
     }
 
     private void requestCriticalSection() {
+        Nodes.replyList.clear();
         for (int nodeNumber = 1; nodeNumber <= Nodes.TOTAL_SERVERS; nodeNumber++) {
+            System.out.println("Sending request to " + nodeNumber);
             new Sender().sendRequest(nodeNumber);
         }
     }

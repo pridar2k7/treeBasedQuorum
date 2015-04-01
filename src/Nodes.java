@@ -10,23 +10,27 @@ import java.util.*;
  * Created by priyadarshini on 3/29/15.
  */
 public class Nodes {
-    public static final int TOTAL_SERVERS = 3;
+    public static final int TOTAL_SERVERS = 7;
     protected static int id;
     static protected Map<Integer, Socket> connectedSockets;
-    public static String state;
-    public static int lockedBy;
+    public static String state="Unlock";
+    public static int lockedBy=0;
     static ServerTree rootNode;
     static HashMap<Integer, ServerTree> serverMap;
     static int sequenceNumber =0;
-    static Queue nextInLineQueue;
+    static Queue<CSRequest> nextInLineQueue;
+    static int entryCount=0;
+    public static final int TIME_UNIT = 50;
+    public static TreeSet<Integer> replyList = new TreeSet<Integer>();;
+
 
     public Nodes() {
-        this.nextInLineQueue = new PriorityQueue();
+        this.nextInLineQueue = new PriorityQueue(10, new QueueComparator());
         this.connectedSockets = new HashMap<Integer, Socket>();
         this.serverMap = new HashMap<Integer, ServerTree>();
     }
 
-    void create(String[] hostDetails) throws IOException {
+    void create(String[] hostDetails) throws Exception {
         id=Integer.parseInt(hostDetails[1]);
         if (hostDetails[0].equals("server")) {
             AcceptClient acceptClient = new AcceptClient(hostDetails, this);
@@ -35,7 +39,9 @@ public class Nodes {
             for (String serverDetail : serverDetails) {
                 String[] splitServerDetails = serverDetail.split(" ");
                 Socket socket = new Socket(splitServerDetails[1], Integer.parseInt(splitServerDetails[2]));
-                connectedSockets.put(Integer.parseInt(splitServerDetails[0]), socket);
+                int clientId = Integer.parseInt(splitServerDetails[0]);
+                MessageReader messageReader = new MessageReader(clientId, socket);
+                connectedSockets.put(clientId, socket);
             }
             createServerTree();
         } else {

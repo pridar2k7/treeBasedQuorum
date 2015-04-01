@@ -18,7 +18,7 @@ public class Sender {
             sender.println(requestMessage);
 //            messageCount++;
         } catch (IOException e) {
-            System.out.println("Something went wrong in send request");
+            System.out.println("Something went wrong in send REQUEST");
         }
     }
 
@@ -33,10 +33,37 @@ public class Sender {
             sender.println(requestMessage);
 //            messageCount++;
         } catch (IOException e) {
-            System.out.println("Something went wrong in send request");
+            System.out.println("Something went wrong in send REPLY");
         }
     }
 
 
+    public void sendRelease(int fromNode) {
+        try {
+            sender = new PrintWriter((Nodes.connectedSockets.get(fromNode)).getOutputStream(), true);
+            String requestMessage = new StringBuilder().append("RELEASE ")
+                    .append(Nodes.sequenceNumber)
+                    .append(" ")
+                    .append(Nodes.id)
+                    .toString();
+            System.out.println("release msg "+ requestMessage);
+            sender.println(requestMessage);
+//            messageCount++;
+        } catch (IOException e) {
+            System.out.println("Something went wrong in send RELEASE");
+        }
+    }
 
+    public void sendStart(int nodeNumber) {
+        try {
+            sender = new PrintWriter((Nodes.connectedSockets.get(nodeNumber)).getOutputStream(), true);
+            String requestMessage = new StringBuilder().append("START ")
+                    .toString();
+            System.out.println("start msg "+ requestMessage);
+            sender.println(requestMessage);
+//            messageCount++;
+        } catch (IOException e) {
+            System.out.println("Something went wrong in send RELEASE");
+        }
+    }
 }
