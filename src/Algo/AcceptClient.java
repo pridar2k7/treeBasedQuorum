@@ -1,3 +1,5 @@
+package Algo;
+
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -25,7 +27,6 @@ public class AcceptClient extends Thread{
                 Socket connectedSocket = serverSocket.accept();
                 MessageReader obClient = new MessageReader(clientId, connectedSocket);
                 nodes.putInConnectedSockets(clientId, connectedSocket);
-                System.out.println("Connected to client id " + clientId);
                 clientId++;
             }
         } catch (Exception e) {

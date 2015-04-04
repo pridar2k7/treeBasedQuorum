@@ -1,3 +1,5 @@
+package Algo;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -16,7 +18,7 @@ public class Sender {
                     .append(Nodes.id)
                     .toString();
             sender.println(requestMessage);
-//            messageCount++;
+            Nodes.sentMessageCount++;
         } catch (IOException e) {
             System.out.println("Something went wrong in send REQUEST");
         }
@@ -31,7 +33,7 @@ public class Sender {
                     .append(Nodes.id)
                     .toString();
             sender.println(requestMessage);
-//            messageCount++;
+            Nodes.sentMessageCount++;
         } catch (IOException e) {
             System.out.println("Something went wrong in send REPLY");
         }
@@ -48,7 +50,7 @@ public class Sender {
                     .toString();
             System.out.println("release msg "+ requestMessage);
             sender.println(requestMessage);
-//            messageCount++;
+            Nodes.sentMessageCount++;
         } catch (IOException e) {
             System.out.println("Something went wrong in send RELEASE");
         }
@@ -61,9 +63,23 @@ public class Sender {
                     .toString();
             System.out.println("start msg "+ requestMessage);
             sender.println(requestMessage);
-//            messageCount++;
+            Nodes.sentMessageCount++;
         } catch (IOException e) {
             System.out.println("Something went wrong in send RELEASE");
+        }
+    }
+
+    public void sendComplete(int nodeNumber) {
+        try {
+            sender = new PrintWriter((Nodes.connectedSockets.get(nodeNumber)).getOutputStream(), true);
+            String requestMessage = new StringBuilder().append("COMPLETE ")
+                    .append(Nodes.id)
+                    .toString();
+            System.out.println("Complete msg "+ requestMessage);
+            sender.println(requestMessage);
+            Nodes.sentMessageCount++;
+        } catch (IOException e) {
+            System.out.println("Something went wrong in send Complete");
         }
     }
 }

@@ -1,5 +1,5 @@
-import java.io.IOException;
-import java.net.ServerSocket;
+package Algo;
+
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -11,6 +11,7 @@ import java.util.*;
  */
 public class Nodes {
     public static final int TOTAL_SERVERS = 7;
+    public static final int TOTAL_CLIENTS = 5;
     protected static int id;
     static protected Map<Integer, Socket> connectedSockets;
     public static String state="Unlock";
@@ -19,9 +20,13 @@ public class Nodes {
     static HashMap<Integer, ServerTree> serverMap;
     static int sequenceNumber =0;
     static Queue<CSRequest> nextInLineQueue;
-    static int entryCount=0;
+    static int entryCount=1;
     public static final int TIME_UNIT = 50;
     public static TreeSet<Integer> replyList = new TreeSet<Integer>();;
+    public static long timeStarted, timeEnded, timeElapsed;
+    public static int totalMessages = 0;
+    public static int sentMessageCount = 0;
+    public static int receivedMessageCount = 0;
 
 
     public Nodes() {

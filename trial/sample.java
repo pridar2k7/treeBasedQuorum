@@ -55,7 +55,7 @@ printQueue(queue);
             System.out.println("csRequest value" + csRequest.nodeNumber + " " + csRequest.sequenceNumber);
         }
 //        while(i<queue.size()){
-//            CSRequest peek = queue.poll();
+//            Algo.CSRequest peek = queue.poll();
 //            System.out.println("peek value" + peek.nodeNumber + " " + peek.sequenceNumber);
 //            i+=1;
 //        }
