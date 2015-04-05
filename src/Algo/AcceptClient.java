@@ -6,6 +6,7 @@ import java.net.Socket;
 /**
  * Created by priyadarshini on 3/29/15.
  */
+//This class accepts client connections coming to the server
 public class AcceptClient extends Thread{
     private final String[] hostDetails;
     private final Nodes nodes;

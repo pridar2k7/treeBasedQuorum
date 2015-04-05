@@ -30,13 +30,13 @@ public class Receiver extends Thread {
                 String[] keyWords = receivedMessage.split(" ");
                 if (keyWords[0].equals("REQUEST")) {
                     System.out.println("Request received from node " + keyWords[2] + " with sequence number" + keyWords[1]);
-                    receiveRequest(Integer.parseInt(keyWords[2]), Integer.parseInt(keyWords[1]));
+                    receiveRequest(Integer.parseInt(keyWords[2]), Long.parseLong(keyWords[1]));
                 } else if (keyWords[0].equals("REPLY")) {
                     System.out.println("Reply received from node " + keyWords[2].trim());
-                    receiveReply(Integer.parseInt(keyWords[2]), Integer.parseInt(keyWords[1]));
+                    receiveReply(Integer.parseInt(keyWords[2]), Long.parseLong(keyWords[1]));
                 } else if (keyWords[0].equals("RELEASE")) {
                     System.out.println("Release received from node " + keyWords[2].trim());
-                    receiveRelease(Integer.parseInt(keyWords[2]), Integer.parseInt(keyWords[1]));
+                    receiveRelease(Integer.parseInt(keyWords[2]), Long.parseLong(keyWords[1]));
                 } else if (keyWords[0].equals("START")) {
                     IssueRequest issueRequest = new IssueRequest();
                 } else if (keyWords[0].equals("COMPLETE")){
@@ -48,6 +48,7 @@ public class Receiver extends Thread {
         }
     }
 
+    //if we receive a complete message, we end the process
     private void receiveComplete() {
         completeMessageCount++;
         if(completeMessageCount== Nodes.TOTAL_CLIENTS){
@@ -63,7 +64,9 @@ public class Receiver extends Thread {
         }
     }
 
-    private void receiveRelease(int fromNode, int sequenceNumber) {
+    //if a release is received from x, we see if the node is locked by that node x if so we release it and process next request in queue..
+    // if the node is not locked by the node x then if it s already present in the queue then it removes the request as it already entered critical section
+    private void receiveRelease(int fromNode, long sequenceNumber) {
         Nodes.state = "Unlock";
         if (fromNode == Nodes.lockedBy) {
             if (!Nodes.nextInLineQueue.isEmpty()) {
@@ -76,9 +79,9 @@ public class Receiver extends Thread {
 
     }
 
-    private void receiveReply(int fromNode, int sequenceNumber) {
+    //as we get a reply we check if we have got replies from any of the quorums and if so we can enter the critical section
+    private void receiveReply(int fromNode, long sequenceNumber) {
         if (Nodes.entryCount <= 20) {
-            Nodes.sequenceNumber = Math.max(Nodes.sequenceNumber, sequenceNumber + 1);
             Nodes.replyList.add(fromNode);
             if (checkQuorumFor(Nodes.rootNode.getNodeNumber())) {
                 enterCriticalSection();
@@ -89,6 +92,7 @@ public class Receiver extends Thread {
         }
     }
 
+    //critical section with 3units of wait time..
     private void enterCriticalSection() {
         try {
             System.out.println("Entered Critical section.. " + new Date() + "  " + System.currentTimeMillis());
@@ -100,6 +104,7 @@ public class Receiver extends Thread {
         }
     }
 
+    ///after we come out of teh critical section we send release messages to all the servers to notify tat the request has been served..
     public void releaseCriticalSection() {
         Nodes.replyList.clear();
         for (int fromNode = 1; fromNode <= Nodes.TOTAL_SERVERS; fromNode++) {
@@ -112,12 +117,13 @@ public class Receiver extends Thread {
     }
 
 
+    //after the critical section entry we need to make the next request calling..
     private void makeRequest() {
         IssueRequest issueRequest = new IssueRequest();
     }
 
-    private void receiveRequest(int fromNode, int sequenceNumber) {
-        Nodes.sequenceNumber = Math.max(Nodes.sequenceNumber, sequenceNumber + 1);
+    //every time we receive a request if we are in unlocked state, we should lock ourselves and if we are in lock state we should put it in the queue
+    private void receiveRequest(int fromNode, long sequenceNumber) {
         if (!Nodes.state.equals("Locked")) {
             lockNode(fromNode);
         } else {
@@ -125,6 +131,7 @@ public class Receiver extends Thread {
         }
     }
 
+    //we shoudl lock the node
     private void lockNode(int nodeNumber) {
         new Sender().sendReply(nodeNumber);
         Nodes.state = "Locked";
@@ -132,6 +139,7 @@ public class Receiver extends Thread {
         System.out.println("Locked by " + Nodes.lockedBy);
     }
 
+    //function to check if the quorum has been acheieved
     private boolean checkQuorumFor(int nodeNumber) {
 
         ServerTree currentNode = Nodes.serverMap.get(nodeNumber);

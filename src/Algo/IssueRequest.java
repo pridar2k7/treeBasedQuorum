@@ -3,6 +3,7 @@ package Algo;
 /**
  * Created by priyadarshini on 3/29/15.
  */
+// Class to issue request for critical section around 20 times within any [5-10] time unit range
 class IssueRequest extends Thread {
     public static final double UNIT_DIFF = 0.25;
 
@@ -11,6 +12,7 @@ class IssueRequest extends Thread {
     }
 
 
+    //try to enter critical section for 20 times and end computation after that by sending complete notification
     @Override
     public void run() {
         try {
@@ -32,6 +34,7 @@ class IssueRequest extends Thread {
         }
     }
 
+    //send request to all servers
     private void requestCriticalSection() {
         Nodes.timeStarted = System.currentTimeMillis();
         Nodes.replyList.clear();

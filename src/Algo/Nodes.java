@@ -9,6 +9,7 @@ import java.util.*;
 /**
  * Created by priyadarshini on 3/29/15.
  */
+//Class to maintain all the data collection and algorithm related details about the node
 public class Nodes {
     public static final int TOTAL_SERVERS = 7;
     public static final int TOTAL_CLIENTS = 5;
@@ -35,6 +36,8 @@ public class Nodes {
         this.serverMap = new HashMap<Integer, ServerTree>();
     }
 
+    //create the necessary socket connections.. if it s a server it calls accept client which will accept all the client connections coming in future
+    //if client connection  reads the server file and connects to all servers as per the address mentioned in the file
     void create(String[] hostDetails) throws Exception {
         id=Integer.parseInt(hostDetails[1]);
         if (hostDetails[0].equals("server")) {
@@ -54,6 +57,7 @@ public class Nodes {
         }
     }
 
+    //creates a binary tree structure with the given server count.. for any node i, 2i will be the left node and 2i+1 will be the right node
     private void createServerTree() {
         for (int nodeNumber = 1; nodeNumber <= TOTAL_SERVERS; nodeNumber++) {
             ServerTree serverTree = new ServerTree(nodeNumber);

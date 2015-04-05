@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 /**
  * Created by priyadarshini on 3/31/15.
  */
+//class to send all the messages
 public class Sender {
     PrintWriter sender;
 
@@ -13,7 +14,7 @@ public class Sender {
         try {
             sender = new PrintWriter((Nodes.connectedSockets.get(channelCount)).getOutputStream(), true);
             String requestMessage = new StringBuilder().append("REQUEST ")
-                    .append(Nodes.sequenceNumber)
+                    .append(System.currentTimeMillis())
                     .append(" ")
                     .append(Nodes.id)
                     .toString();
@@ -28,7 +29,7 @@ public class Sender {
         try {
             sender = new PrintWriter((Nodes.connectedSockets.get(channelCount)).getOutputStream(), true);
             String requestMessage = new StringBuilder().append("REPLY ")
-                    .append(Nodes.sequenceNumber)
+                    .append(System.currentTimeMillis())
                     .append(" ")
                     .append(Nodes.id)
                     .toString();
@@ -44,7 +45,7 @@ public class Sender {
         try {
             sender = new PrintWriter((Nodes.connectedSockets.get(fromNode)).getOutputStream(), true);
             String requestMessage = new StringBuilder().append("RELEASE ")
-                    .append(Nodes.sequenceNumber)
+                    .append(System.currentTimeMillis())
                     .append(" ")
                     .append(Nodes.id)
                     .toString();

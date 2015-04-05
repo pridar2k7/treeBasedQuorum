@@ -8,6 +8,7 @@ import java.util.List;
 /**
  * Created by priyadarshini on 3/29/15.
  */
+//This is the main class to either start the process or start the receiver to keep accepting the messages
 public class Maekawa {
 
     public static void main(String[] args) throws Exception{

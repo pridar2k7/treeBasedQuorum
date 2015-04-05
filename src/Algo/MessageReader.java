@@ -9,6 +9,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 /**
  * Created by priyadarshini on 3/29/15.
  */
+//Separate thread to keep listening to the messages from the client connections..
 public class MessageReader extends Thread {
     Socket clientSocket;
     BufferedReader reader;

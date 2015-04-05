@@ -3,6 +3,7 @@ package Algo;
 /**
  * Created by priyadarshini on 3/29/15.
  */
+//class where the binary tree s constructed for checking quorum purposes..
 public class ServerTree {
     private final int nodeNumber;
 
