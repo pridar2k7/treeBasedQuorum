@@ -1,1 +1,1 @@
-ACS-12345 Not Valid commit
+This just checks commit hooks.
