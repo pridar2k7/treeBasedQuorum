@@ -1,1 +1,1 @@
-sadfaaksbdkabsdThis just checks commit hooks.
+This just checks commit hooks.
